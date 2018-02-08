@@ -1,6 +1,8 @@
 package com.example.willimail.rxjava;
 
 import rx.Observable;
+import rx.Observer;
+import rx.Subscriber;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
@@ -10,7 +12,51 @@ import rx.functions.Func1;
 
 public class RxSample {
     public static void main(String[] args) {
-        printPairs();
+        flatMap();
+    }
+
+    private static void flatMap() {
+        Observable.just(1, 2, 3, 4, 5)
+                .flatMap(new Func1<Integer, Observable<String>>() {
+                    @Override
+                    public Observable<String> call(Integer integer) {
+                        //Observables instead of Strings
+                        return Observable.just(integer + " - " + integer);
+                    }
+                })
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        System.out.println(s);
+                    }
+                });
+    }
+
+    private static void onCreate() {
+        Observable.create(new Observable.OnSubscribe<Object>() {
+            @Override
+            public void call(Subscriber<? super Object> subscriber) {
+                subscriber.onNext("Do process 1");
+                subscriber.onNext("Do process 2");
+                subscriber.onNext("Do process 3");
+                subscriber.onCompleted();
+            }
+        }).subscribe(new Observer<Object>() {
+            @Override
+            public void onCompleted() {
+                System.out.println("Completed!");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                System.out.println("Error" + e);
+            }
+
+            @Override
+            public void onNext(Object o) {
+                System.out.println(o);
+            }
+        });
     }
 
     private static void printPairs() {
