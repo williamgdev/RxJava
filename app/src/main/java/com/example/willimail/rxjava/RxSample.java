@@ -21,8 +21,25 @@ import rx.schedulers.Schedulers;
 
 public class RxSample {
     public static void main(String[] args) {
-        otherThread();
+        intervalExample();
 
+    }
+
+    private static void intervalExample() {
+        Observable.interval(1, TimeUnit.SECONDS)
+                .subscribe(new Action1<Long>() {
+                    @Override
+                    public void call(Long aLong) {
+                        System.out.println(aLong);
+                    }
+                });
+
+        try {
+            Thread.sleep(5000);
+            System.out.println("2nd thread " + Thread.currentThread());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void otherThread() {
