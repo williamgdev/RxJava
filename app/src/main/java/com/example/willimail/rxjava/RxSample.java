@@ -21,6 +21,22 @@ import rx.schedulers.Schedulers;
 
 public class RxSample {
     public static void main(String[] args) {
+        skipExample();
+
+    }
+
+    private static void skipExample() {
+        Observable.from(new String[]{"1", "2", "3", "4", "5", "6"})
+                .skip(2)
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        System.out.println(s);
+                    }
+                });
+    }
+
+    private static void listExample() {
         Executor executor =
                 new ThreadPoolExecutor(5, 5, 200, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(10));
         List<Integer> values = new ArrayList<>();
@@ -41,14 +57,9 @@ public class RxSample {
         };
         observable.subscribe(subscriber);
         values.add(0);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         values.add(1);
         values.add(2);
-        values.add(1);
+        values.add(3);
         values.add(2);
         values.add(1);
         values.add(2);
@@ -58,6 +69,12 @@ public class RxSample {
         values.add(2);
         values.add(1);
         values.add(0);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         observable.connect();
     }
 
