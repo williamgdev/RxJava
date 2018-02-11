@@ -21,8 +21,29 @@ import rx.schedulers.Schedulers;
 
 public class RxSample {
     public static void main(String[] args) {
-        takeExample();
+        otherThread();
 
+    }
+
+    private static void otherThread() {
+        Observable.just("Hello")
+                .subscribeOn(Schedulers.newThread())
+//                .observeOn(AndroidSchedulers.mainThread()) // We would use this in Android
+                .observeOn(Schedulers.immediate())
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        System.out.println(s + " " + Thread.currentThread());
+                    }
+                });
+
+        try {
+            Thread.sleep(1000);
+
+            System.out.println("2nd thread " + Thread.currentThread());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void takeExample() {
