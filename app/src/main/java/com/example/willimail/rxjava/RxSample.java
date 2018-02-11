@@ -21,8 +21,19 @@ import rx.schedulers.Schedulers;
 
 public class RxSample {
     public static void main(String[] args) {
-        skipExample();
+        takeExample();
 
+    }
+
+    private static void takeExample() {
+        Observable.from(new String[]{"1", "2", "3", "4", "5", "6"})
+                .take(2)
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        System.out.println(s);
+                    }
+                });
     }
 
     private static void skipExample() {
