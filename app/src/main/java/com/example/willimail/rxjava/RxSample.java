@@ -12,6 +12,7 @@ import rx.Observer;
 import rx.Subscriber;
 import rx.functions.Action1;
 import rx.functions.Func1;
+import rx.functions.Func2;
 import rx.observables.ConnectableObservable;
 import rx.schedulers.Schedulers;
 
@@ -21,8 +22,24 @@ import rx.schedulers.Schedulers;
 
 public class RxSample {
     public static void main(String[] args) {
-        intervalExample();
+        zipObservers();
+    }
 
+    private static void zipObservers() {
+        Observable<String> stringObservable1 = Observable.just("Hello", "World");
+        Observable<String> stringObservable2 = Observable.just("Bye", "Friends");
+
+        Observable.zip(stringObservable1, stringObservable2, new Func2<String, String, String>() {
+            @Override
+            public String call(String s, String s2) {
+                return s + " - " + s2;
+            }
+        }).subscribe(new Action1<String>() {
+            @Override
+            public void call(String s) {
+                System.out.println(s);
+            }
+        });
     }
 
     private static void intervalExample() {
